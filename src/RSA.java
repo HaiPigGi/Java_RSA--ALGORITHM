@@ -4,8 +4,9 @@ public class RSA {
 
     private static BigInteger p = BigInteger.valueOf(47);
     private static BigInteger q = BigInteger.valueOf(71);
-     private static BigInteger n = p.multiply(q);
+    private static BigInteger n = p.multiply(q);
     private static BigInteger phi = (p.subtract((BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE)));
+
     public static void main(String[] args) {
         //Pilih Kunci Publik e
         BigInteger e = BigInteger.valueOf(79);
@@ -20,9 +21,21 @@ public class RSA {
 
         //enkripsi pesan
         byte[] cipherTextBytes = encrypt(plainTextBytes, e, n);
+        String cipherText = new String (cipherTextBytes);
+
+        //Dekripsi Pesan
+        byte [] plainTextDecyptedBytes = decypt(cipherTextBytes, d, n);
+        String plainTextDecrypted = new String(plainTextDecyptedBytes);
+
+
+        //result
+        System.out.println("Pesan Asli : "+plainText);
+        System.out.println("kunci public : "+e);
+        System.out.println("Kunci Private : "+d);
+        System.out.println("CipherText : "+cipherText);
+        System.out.println("Plain Text Dekripsi : "+plainTextDecrypted);
+
     }
-
-
 
     private static byte [] encrypt (byte[] plainTextBytes, BigInteger e, BigInteger n) {
         BigInteger CipherText = new BigInteger(1, plainTextBytes);
@@ -35,6 +48,5 @@ public class RSA {
         plainText= plainText.modPow(d, n);
         return plainText.toByteArray();
     }
-    
 
 }
