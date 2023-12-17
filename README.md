@@ -53,7 +53,49 @@ Asymmetric cryptography involves the use of a pair of keys: a public key for enc
 ## Example Code
 
 ```java
-// Example Java code for RSA encryption and decryption.
-// See accompanying code files for a complete implementation.
+   // Parameter RSA
+        BigInteger p = BigInteger.valueOf(47);
+        BigInteger q = BigInteger.valueOf(71);
+        BigInteger n = p.multiply(q);
+        BigInteger phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
+        BigInteger e = BigInteger.valueOf(79);
 
-// ...
+        // Hitung kunci privat d
+        BigInteger d = calculatePrivateKey(e, phi);
+
+        // Tampilkan nilai n, e, dan d
+        System.out.println("Nilai n: " + n);
+        System.out.println("Kunci Publik e: " + e);
+        System.out.println("Kunci Privat d: " + d);
+
+        // Pesan yang akan dienkripsi
+        String plainText = "HARIINI";
+
+        // Konversi pesan menjadi blok-blok 3 digit ASCII
+        BigInteger[] blocks = convertToBlocks(plainText);
+
+        // Enkripsi setiap blok
+        BigInteger[] encryptedBlocks = encryptBlocks(blocks, e, n);
+
+        // Tampilkan hasil enkripsi
+        System.out.print("Hasil Enkripsi C = ");
+        for (BigInteger block : encryptedBlocks) {
+            System.out.print(block.toString() + " ");
+        }
+        System.out.println();
+
+        // Iterasi untuk Enkripsi
+        encryptIteration(blocks, e, n);
+
+        // Dekripsi menggunakan kunci privat d
+        BigInteger[] decryptedBlocks = decryptBlocks(encryptedBlocks, d, n);
+
+        // Tampilkan hasil dekripsi
+        System.out.print("Hasil Dekripsi M = ");
+        for (BigInteger block : decryptedBlocks) {
+            System.out.print(block.toString() + " ");
+        }
+        System.out.println();
+
+        // Iterasi untuk Dekripsi
+        decryptIteration(decryptedBlocks, d, n);
