@@ -35,14 +35,24 @@ public class RSAExample {
         }
         System.out.println();
 
+        // Iterasi untuk Enkripsi
+        encryptIteration(blocks, e, n);
+
         // Dekripsi menggunakan kunci privat d
         BigInteger[] decryptedBlocks = decryptBlocks(encryptedBlocks, d, n);
 
-        // Gabungkan blok-blok dan tampilkan hasil dekripsi
-        String decryptedText = combineBlocks(decryptedBlocks);
-        System.out.println("Hasil Dekripsi M = " + decryptedText);
+        // Tampilkan hasil dekripsi
+        System.out.print("Hasil Dekripsi M = ");
+        for (BigInteger block : decryptedBlocks) {
+            System.out.print(block.toString() + " ");
+        }
+        System.out.println();
+
+        // Iterasi untuk Dekripsi
+        decryptIteration(decryptedBlocks, d, n);
     }
 
+    // Menghitung kunci privat d
     private static BigInteger calculatePrivateKey(BigInteger e, BigInteger phi) {
         BigInteger k = BigInteger.ONE;
         while (true) {
@@ -54,6 +64,7 @@ public class RSAExample {
         }
     }
 
+    // Konversi pesan menjadi blok-blok 3 digit ASCII
     private static BigInteger[] convertToBlocks(String plainText) {
         byte[] plainTextBytes = plainText.getBytes(StandardCharsets.US_ASCII);
         BigInteger[] blocks = new BigInteger[plainTextBytes.length];
@@ -65,6 +76,7 @@ public class RSAExample {
         return blocks;
     }
 
+    // Enkripsi setiap blok
     private static BigInteger[] encryptBlocks(BigInteger[] blocks, BigInteger e, BigInteger n) {
         BigInteger[] encryptedBlocks = new BigInteger[blocks.length];
         for (int i = 0; i < blocks.length; i++) {
@@ -73,6 +85,7 @@ public class RSAExample {
         return encryptedBlocks;
     }
 
+    // Dekripsi setiap blok
     private static BigInteger[] decryptBlocks(BigInteger[] encryptedBlocks, BigInteger d, BigInteger n) {
         BigInteger[] decryptedBlocks = new BigInteger[encryptedBlocks.length];
         for (int i = 0; i < encryptedBlocks.length; i++) {
@@ -81,11 +94,33 @@ public class RSAExample {
         return decryptedBlocks;
     }
 
+    // Menggabungkan blok-blok menjadi teks
     private static String combineBlocks(BigInteger[] blocks) {
         byte[] decryptedBytes = new byte[blocks.length];
         for (int i = 0; i < blocks.length; i++) {
             decryptedBytes[i] = blocks[i].byteValue();
         }
         return new String(decryptedBytes, StandardCharsets.US_ASCII);
+    }
+
+    // Iterasi untuk Enkripsi
+    private static void encryptIteration(BigInteger[] blocks, BigInteger e, BigInteger n) {
+        System.out.println("Iterasi untuk Enkripsi:");
+        for (int i = 0; i < blocks.length; i++) {
+            System.out.println("Enkripsi blok '" + blocks[i] + "':");
+            System.out.println("C = " + blocks[i] + "^" + e + " % " + n);
+            System.out.println("Hasil Enkripsi C = " + blocks[i].modPow(e, n));
+        }
+        System.out.println();
+    }
+
+    // Iterasi untuk Dekripsi
+    private static void decryptIteration(BigInteger[] blocks, BigInteger d, BigInteger n) {
+        System.out.println("Iterasi untuk Dekripsi:");
+        for (int i = 0; i < blocks.length; i++) {
+            System.out.println("Dekripsi blok '" + blocks[i] + "':");
+            System.out.println("M = " + blocks[i] + "^" + d + " % " + n);
+            System.out.println("Hasil Dekripsi M = " + blocks[i].modPow(d, n));
+        }
     }
 }
